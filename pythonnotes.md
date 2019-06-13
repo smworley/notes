@@ -8,7 +8,7 @@ It is not a strongly typed language, which means that variables do not have to s
 **Editors:**   
 I highly recommend [Anaconda's Spyder](https://www.spyder-ide.org/) editor to those who are getting started but still want more features than the IDE from the Python site. It also comes with conda and the conda terminal, which makes it very easy to download and install new packages. Personally use [JetBrain's PyCharm](https://www.jetbrains.com/pycharm/) (community ver.) to write and debug python, but for some applications it's overkill.
 
-- **Note:** As of late, PyCharm 2019.1.2 doesn't play well with Anaconda. This has been confirmed as a problem on JetBrain's side but be warned, none of your library imports will work right if your installation of PyCharm isn't 100% exactly what they use. The team hopes to have this fixed in 2019.1.3 but I don't know when that's coming out. View issue thread [here](https://youtrack.jetbrains.com/issue/PY-35141).  
+- **Note:** PyCharm issue mentioned in last commit has been fixed in 2019.1.3 :)
 
 **Purpose of this document:**  
 These are personal notes but also for anyone who may find them of use. It will get you started and can serve as a cheat sheet for those who are already familiar with the language. I specifically write this in response to a lot of pedantic tutorials. There's a lot of examples here because that's the best way to learn code. If you're reading this to learn, I recommend testing the examples yourself breaking them. There's no better way to find out how something ticks than to break it. :smiling_imp:
@@ -255,9 +255,9 @@ This code imports a module and renames it, you can see here that when we invoke 
 
 4. In the target python file, import your library like this:
 ```Python
-from package1 import primary as prime      # import one module from package1
+from packages import library as lib      # import one module from package1
 # import our library
-prime.myfunction(200)  
+lib.myfunction(200)  
 # reference a function in the primary library
 ```
 
@@ -282,3 +282,4 @@ The tutorials I used to learn python are credited below, but since I learned it 
 - [Geeksforgeeks: python formatted printing](https://www.geeksforgeeks.org/python-output-formatting/)  
 - [Stackoverflow: How to create custom python libraries, arcseldon's answer specifically](https://stackoverflow.com/questions/15746675/how-to-write-a-python-module-package)  
 - [Guru99: Python File I/O](https://www.guru99.com/reading-and-writing-files-in-python.html)
+
