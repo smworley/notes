@@ -1,4 +1,4 @@
-Boolean# Python 3 notes
+# Python 3 notes
 By Sarah Worley ([@smworley](https://github.com/smworley) on github :sparkling_heart: ).  
 
 Python is an interpreted object oriented scripting language. It can serve a wide variety of roles due to the number of packages and modules available for it.
