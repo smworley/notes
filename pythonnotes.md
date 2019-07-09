@@ -1,4 +1,4 @@
-# Python 3 notes
+Boolean# Python 3 notes
 By Sarah Worley ([@smworley](https://github.com/smworley) on github :sparkling_heart: ).  
 
 Python is an interpreted object oriented scripting language. It can serve a wide variety of roles due to the number of packages and modules available for it.
@@ -8,7 +8,7 @@ It is not a strongly typed language, which means that variables do not have to s
 **Editors:**   
 I highly recommend [Anaconda's Spyder](https://www.spyder-ide.org/) editor to those who are getting started but still want more features than the IDE from the Python site. It also comes with conda and the conda terminal, which makes it very easy to download and install new packages. Personally use [JetBrain's PyCharm](https://www.jetbrains.com/pycharm/) (community ver.) to write and debug python, but for some applications it's overkill.
 
-- **Note:** PyCharm issue mentioned in last commit has been fixed in 2019.1.3 :)
+- **Note:** As of late, PyCharm 2019.1.2 doesn't play well with Anaconda. This has been confirmed as a problem on JetBrain's side but be warned, none of your library imports will work right if your installation of PyCharm isn't 100% exactly what they use. The team hopes to have this fixed in 2019.1.3 but I don't know when that's coming out. View issue thread [here](https://youtrack.jetbrains.com/issue/PY-35141).  
 
 **Purpose of this document:**  
 These are personal notes but also for anyone who may find them of use. It will get you started and can serve as a cheat sheet for those who are already familiar with the language. I specifically write this in response to a lot of pedantic tutorials. There's a lot of examples here because that's the best way to learn code. If you're reading this to learn, I recommend testing the examples yourself breaking them. There's no better way to find out how something ticks than to break it. :smiling_imp:
@@ -255,9 +255,9 @@ This code imports a module and renames it, you can see here that when we invoke 
 
 4. In the target python file, import your library like this:
 ```Python
-from packages import library as lib      # import one module from package1
+from package1 import primary as prime      # import one module from package1
 # import our library
-lib.myfunction(200)  
+prime.myfunction(200)  
 # reference a function in the primary library
 ```
 
@@ -275,6 +275,139 @@ end = time.time()
 print("I took %d seconds!" %(end-start))
 ```
 
+## Numpy notes
+Numpy is a very important python library for doing fast data analysis, however it's method of indexing can be difficult to understand at first. Hence, I wrote a small guide here on the matter. For clarity, examples in this section are written on the console.
+
+### Creating arrays
+
+To understand indexing, lets first create a 2d array with numpy.
+```python
+import numpy as np
+# declare the array and fill it with our values.
+x = np.array([[0,1,2,3],[4,5,6,7],[8,9,10,11],[12,13,14,15]])
+# return shape (dimensions) of our array
+x.shape
+```
+So, we just made an array that looks like this:
+
+| 0 | 1 | 2 | 3 |
+|--|--|--|--|
+| 4 | 5 | 6 | 7 |
+| 8 | 9 | 10 | 11 |
+| 12 | 13 | 14 | 15 |
+
+Indexes run from 0 to N-1 on both axis with N being the number of rows or columns.
+
+### Indexing and slicing in numpy
+**Commas** between coordinates indicates which dimension.  
+
+`[rows, columns, ... optional axis]`
+
+On the column and rows, the index of these begins at 0. So `[0,0]` would be equal to the value 0 here.
+With that in mind, here's some examples of single dimension indexing on a numpy array.
+```Python
+>> x[0,1]			# return 2nd element in first row. (y,x)
+>> 1
+>> x[1,0]			# return 1st element in second row. (y,x)
+>> 4
+```
+Just like you would find a coordinate on a standard Cartesian plane. But we don't just want cells, we want rows and columns sometimes.
+
+**Colons** between numbers indicates ranges within that dimension.   
+
+`[start:stop:step]`  
+
+Keep in mind that the default arguments for the colons is `0:N:1`, where N is the total number of elements in that dimension. Note that is N, not N-1.  
+AND NOTE, when indexing, if you do [1:4] it will return rows 1,2, and 3. It will not return row 4, even if row 4 exists. This also applies to columns.
+
+```Python
+>> # Get the first row
+>> x[:1]
+>> array([[0, 1, 2, 3]])
+>> # Get the first column
+>> x[:,:1]
+>>
+array([[ 0],
+       [ 4],
+       [ 8],
+       [12]])
+```
+
+If we want to get a 2 dimensional slice of something, use both arguments for the colons.
+```Python
+>> # Get a slice containing of the first 4 rows and first 2 columns.
+>> x[:4,:2]
+>>
+array([[ 0,  1],
+       [ 4,  5],
+       [ 8,  9],
+       [12, 13]])
+>> # Get a slice containing the first 3 rows last two columns
+>> x[:3,2:]
+>>
+array([[ 2,  3],
+       [ 6,  7],
+       [10, 11]])
+```
+To change the ordering, utilize the step argument for the colons.
+```Python
+>> # Transpose on the X axis
+>> x[::-1,]
+>>
+array([[12, 13, 14, 15],
+       [ 8,  9, 10, 11],
+       [ 4,  5,  6,  7],
+       [ 0,  1,  2,  3]])
+>> # Transpose on the Y axis.
+>> x[:,::-1]
+>>
+array([[ 3,  2,  1,  0],
+			[ 7,  6,  5,  4],
+			[11, 10,  9,  8],
+			[15, 14, 13, 12]])
+>> # get odd numbered columns.
+>> x[:,::2]
+>>
+array([[ 0,  2],
+       [ 4,  6],
+       [ 8, 10],
+       [12, 14]])
+```
+**Indexing with Boolean operators:**  
+`nparray Boolean operation`  - Return an array with true or false values for where the Boolean evaluates true or false. The returned array will be the entire length of the evaluated array.  
+`nparray[nparray boolean operation]` - Return an array containing the values which evaluate true. The returned array will only be as long as the number of elements that pass.  
+
+```Python
+>> # Return Boolean evaluations.
+>> x > 4
+>>
+array([[False, False, False, False],
+       [False,  True,  True,  True],
+       [ True,  True,  True,  True],
+       [ True,  True,  True,  True]])
+>> # Return values where the Boolean was true.
+>> x[x > 4]
+>> array([ 5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15])
+```
+**Arithmetic operations on entire ndarrays:**  
+`nparray1 (operator) nparray2` - Both ndarrays must be the same dimensions, the operation will be performed as if the two were stacked on top of one another.  
+`nparray arithmetic expression` - Perform the arithmetic expression to every element in the array.  
+```Python
+>> y = np.array([[10,10,10,10],[20,20,20,20],[30,30,30,30],[40,40,40,40]])
+>> # Add x and y together
+>> x + y
+>>
+array([[10, 11, 12, 13],
+       [24, 25, 26, 27],
+       [38, 39, 40, 41],
+       [52, 53, 54, 55]])
+>> (5*x)/20
+>>
+array([[0.  , 0.25, 0.5 , 0.75],
+       [1.  , 1.25, 1.5 , 1.75],
+       [2.  , 2.25, 2.5 , 2.75],
+       [3.  , 3.25, 3.5 , 3.75]])
+```
 
 ## Credits[](#credits)
 The tutorials I used to learn python are credited below, but since I learned it in school a lot of this comes from personal knowledge. Credits are in no particular order.  
@@ -282,4 +415,6 @@ The tutorials I used to learn python are credited below, but since I learned it 
 - [Geeksforgeeks: python formatted printing](https://www.geeksforgeeks.org/python-output-formatting/)  
 - [Stackoverflow: How to create custom python libraries, arcseldon's answer specifically](https://stackoverflow.com/questions/15746675/how-to-write-a-python-module-package)  
 - [Guru99: Python File I/O](https://www.guru99.com/reading-and-writing-files-in-python.html)
+- [Learn NUMPY in 5 minutes - BEST Python Library! by Python Programmer on YouTube](https://youtu.be/xECXZ3tyONo)
+- [Numpy Array Slicing - Tutorial on Array Slicing Numpy](https://youtu.be/7YvKhcs7sb0)
 
