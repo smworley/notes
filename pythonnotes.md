@@ -1,5 +1,5 @@
 # Python 3 notes
-By Sarah Worley ([@smworley](https://github.com/smworley) on github :sparkling_heart: ).  
+By Sarah Worley ([@smworley](https://github.com/smworley) on github).  
 
 Python is an interpreted object oriented scripting language. It can serve a wide variety of roles due to the number of packages and modules available for it.
 
@@ -11,7 +11,7 @@ I highly recommend [Anaconda's Spyder](https://www.spyder-ide.org/) editor to th
 - **Note:** As of late, PyCharm 2019.1.2 doesn't play well with Anaconda. This has been confirmed as a problem on JetBrain's side but be warned, none of your library imports will work right if your installation of PyCharm isn't 100% exactly what they use. The team hopes to have this fixed in 2019.1.3 but I don't know when that's coming out. View issue thread [here](https://youtrack.jetbrains.com/issue/PY-35141).  
 
 **Purpose of this document:**  
-These are personal notes but also for anyone who may find them of use. It will get you started and can serve as a cheat sheet for those who are already familiar with the language. I specifically write this in response to a lot of pedantic tutorials. There's a lot of examples here because that's the best way to learn code. If you're reading this to learn, I recommend testing the examples yourself breaking them. There's no better way to find out how something ticks than to break it. :smiling_imp:
+These are personal notes but also for anyone who may find them of use. It will get you started and can serve as a cheat sheet for those who are already familiar with the language. I specifically write this in response to a lot of pedantic tutorials. There's a lot of examples here because that's the best way to learn code. If you're reading this to learn, I recommend testing the examples yourself breaking them. There's no better way to find out how something ticks than to break it.
 
 ## Table of Contents:
 - [Printing](#printing)
