@@ -6,12 +6,12 @@ Python is an interpreted object oriented scripting language. It can serve a wide
 It is not a strongly typed language, which means that variables do not have to stay the data type that they are. You could use a variable 'i' as an integer and then later use it as a string, so a certain level of discipline is required to keep python code from turning into nonsensical spaghetti.
 
 **Editors:**   
-I highly recommend [Anaconda's Spyder](https://www.spyder-ide.org/) editor to those who are getting started but still want more features than the IDE from the Python site. It also comes with conda and the conda terminal, which makes it very easy to download and install new packages. Personally use [JetBrain's PyCharm](https://www.jetbrains.com/pycharm/) (community ver.) to write and debug python, but for some applications it's overkill.
+I highly recommend [Anaconda's Spyder](https://www.spyder-ide.org/) editor to those who are getting started but still want more features than the IDE from the Python site. It also comes with conda and the conda terminal, which makes it very easy to download and install new packages. There is also [JetBrain's PyCharm](https://www.jetbrains.com/pycharm/) (community ver.) but for some applications it's overkill, and it will not automatically download some of the packages required for data science applications. 
 
 - **Note:** As of late, PyCharm 2019.1.2 doesn't play well with Anaconda. This has been confirmed as a problem on JetBrain's side but be warned, none of your library imports will work right if your installation of PyCharm isn't 100% exactly what they use. The team hopes to have this fixed in 2019.1.3 but I don't know when that's coming out. View issue thread [here](https://youtrack.jetbrains.com/issue/PY-35141).  
 
 **Purpose of this document:**  
-These are personal notes but also for anyone who may find them of use. It will get you started and can serve as a cheat sheet for those who are already familiar with the language. I specifically write this in response to a lot of pedantic tutorials. There's a lot of examples here because that's the best way to learn code. If you're reading this to learn, I recommend testing the examples yourself breaking them. There's no better way to find out how something ticks than to break it.
+These are personal notes but also for anyone who may find them of use. It will get you started and can serve as a cheat sheet for those who are already familiar with the language. I specifically write this in response to a lot of pedantic tutorials, though those definitely have their place and I encourage anyone seeking a deeper understanding of the language to use those instead. There's a lot of examples here because that's the best way to learn code. If you're reading this to learn, I recommend testing the examples yourself breaking them. There's no better way to find out how something ticks than to break it.
 
 ## Table of Contents:
 - [Printing](#printing)
@@ -21,6 +21,8 @@ These are personal notes but also for anyone who may find them of use. It will g
 - [Functions](#functions)
 - [Libraries](#libraries)
 - [Custom Libraries](#libraries)
+- [Pandas Notes](#pandas)
+- [Numpy Notes](#numpy)
 - [Credits](#credits)
 
 
@@ -47,7 +49,7 @@ Lets say you're checking the weather. You don't take an umbrella when it's sunny
 
 In code, that process would look like this.
 
-**If statments:**
+**If statements:**
 ```Python
 weather = "rainy"
 
@@ -275,7 +277,92 @@ end = time.time()
 print("I took %d seconds!" %(end-start))
 ```
 
-## Numpy notes
+## Pandas Notes[](#pandas)
+Pandas is library for data sheet manipulation. The main types in pandas are *series*, and several series on top of one another form a *dataframe*. 
+
+### Series 
+Here we create a series in two different ways. 
+```Python 
+# Always import these two. 
+import pandas as pd
+import numpy as np 
+
+my_data = [10,20,30]
+labels = ["cat","weight","rudeness"]
+
+unlabeled_data = pd.Series(data=my_data)                # creates numerically labeled series 
+labeled_data = pd.Series(data=my_data, index=labels)   # creates a series using pre-made label lists 
+```
+
+### Dataframes 
+**Creating a dataframe:** A dataframe is a collection of series, and can be created in multiple ways. Below, a dataframe is created with the A,B,C,D,E row indexes or row names, and the W,X,Y,Z column headers. Each cell is populated with a random number. 
+```python
+import pandas as pd
+import numpy as np 
+from numpy.random import randn
+
+# creates dataframe with random values, row labels, then column labels 
+df = pd.DataFrame(randn(5, 4), ['A', 'B', 'C', 'D', 'E'], ['W', 'X', 'Y', 'Z']) 
+# creates a new column that is the sum of columns W and Z
+df['new'] = df['W'] + df['Z']
+```
+
+**Importing data to a dataframe from a CSV:** 
+For this example, our data will be in cat_data.csv, and is the following: 
+```
+0 taco  12.1  1.2
+1 snowball  10.5  1.7
+2 midnight  4.6 1.2
+3 jefferson 8.3 1.8
+4 missile 13.2  2.0
+```
+Well that's not very pretty, is it. 
+
+This is a tab delimited CSV file with four columns, one of which I want to make the index of our dataframe. Notice that we don't have any names for our columns contained in this file, and that `None` starts with a capital n. Because of that, we're going to need to use some arguments for our `pd.read_csv()` when we go to import our cat data. 
+
+This particular method has *lots* of arguments so you can make your life really easy when importing, I'll only go over a few in but [here](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) is the exhaustive list.  
+
+```python
+import pandas as pd
+import numpy as np 
+
+# create a data frame from a CSV
+column_headers = ["cat name", "cat weight", "cat height"]
+# read csv is taking the file name, weather or not the file has headers built in, what the column headers are, and then how the file is delimited. 
+cat_data = pd.read_csv("cat_data.csv", header = None, names = column_headers, delimiter = "\t" )
+```
+After importing cat_data.csv and going to the console, we can see that we now have successfully created this dataframe. 
+
+```python
+>> cat_data
+>>
+    cat name  cat weight  cat height
+0       taco        12.1         1.2
+1   snowball        10.5         1.7
+2   midnight         4.6         1.2
+3  jefferson         8.3         1.8
+4    missile        13.2         2.0
+>>
+```
+
+We can now move around this data however we like. Notice how the first column of our data doesn't have a header, this is because we've told it to regard this as the *index* for our rows. The row index can be thought of as the row headers, and is the primary method for moving about that axis. Typically I like to keep this as numbers, but we could have set it to cat name and default index that way. The first row contains our column headers. Numpy defaults to numerical indexing, where as pandas really shines with strings for headers. Seek out the numpy section of this and compare how navigating dataframes works. You may prefer the pure numerical indexing. I certainly do not. 
+
+**Indexing through a dataframe:** 
+
+So we've got our csv into a dataframe and we're ready to look at our data. 
+
+```python
+
+// ADDIT: INDEXING THROUGH DATAFRAMES PANDAS
+
+```
+
+### Multi-index 
+
+// ADDIT: MULTI-INDEX PANDAS 
+
+
+## Numpy notes[](#numpy)
 Numpy is a very important python library for doing fast data analysis, however it's method of indexing can be difficult to understand at first. Hence, I wrote a small guide here on the matter. For clarity, examples in this section are written on the console.
 
 ### Creating arrays
